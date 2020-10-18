@@ -12,9 +12,8 @@ import {
   Dropdown,
   Form,
 } from "react-bootstrap";
-import {
-  useHistory,
-} from "react-router-dom";
+import { useHistory } from "react-router-dom";
+import Header from "./Header";
 
 function Gallery() {
   const [products, setProductos] = useState([]);
@@ -63,20 +62,7 @@ function Gallery() {
 
   return (
     <div>
-      <Navbar bg="light" variant="light">
-        <Nav className="ml-5 mt-3 mb-3">
-          <Nav.Link href="#home">Inicio</Nav.Link>
-          <Nav.Link href="#features">Comprar</Nav.Link>
-          <Nav.Link href="#pricing">Blog</Nav.Link>
-        </Nav>
-        <Navbar.Brand
-          className="m-auto"
-          href="#home"
-          style={{ fontWeight: "bold" }}
-        >
-          NOMADS
-        </Navbar.Brand>
-      </Navbar>
+      <Header />
       <Container>
         <Row className="text-center" style={{ padding: "3em" }}>
           <Col>
@@ -95,10 +81,10 @@ function Gallery() {
                 aria-describedby="inputGroup-sizing-sm"
                 onChange={(ev) => setSearch(ev.target.value)}
               />
-              <Button variant="secondary" onClick={() => handleSearch(search)}>
-                Buscar
-              </Button>
             </InputGroup>
+            <Button variant="secondary" onClick={() => handleSearch(search)}>
+              Buscar
+            </Button>
             <Dropdown.Divider />
             <strong>Precio</strong>
             <InputGroup className="mb-3 mt-3">

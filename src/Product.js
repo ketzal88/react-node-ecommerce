@@ -8,9 +8,8 @@ import {
   Image,
   Button,
 } from "react-bootstrap";
-import {
-  useParams
-} from "react-router-dom";
+import { useParams } from "react-router-dom";
+import Header from "./Header";
 
 function Product() {
   const [product, setProduct] = useState([]);
@@ -30,33 +29,56 @@ function Product() {
 
   return (
     <div>
-      <Navbar bg="light" variant="light">
-        <Nav className="ml-5 mt-3 mb-3">
-          <Nav.Link href="#home">Inicio</Nav.Link>
-          <Nav.Link href="#features">Comprar</Nav.Link>
-          <Nav.Link href="#pricing">Blog</Nav.Link>
-        </Nav>
-        <Navbar.Brand
-          className="m-auto"
-          href="#home"
-          style={{ fontWeight: "bold" }}
-        >
-          NOMADS
-        </Navbar.Brand>
-      </Navbar>
+      <Header />
       <Container>
         <Row>
           <Col xs md lg="8">
-            <Image src={product.img}></Image>
+            <Image
+              src={product.img}
+              style={{ width: "400px", margin: "5em" }}
+            ></Image>
           </Col>
           <Col xs md lg="4">
-            <Row>
-              <h1>{product.name}</h1>
-              <h2>{product.precio}</h2>
-              <h4>{product.categoria}</h4>
-              <Button variant="secondary">AGREGAR AL CARRITO</Button>
-              <Button variant="dark">COMPRAR AHORA</Button>
-              <span>{product.descripcion}</span>
+            <Row
+              style={{
+                marginTop: "5em",
+                marginRight: "5em",
+                marginLeft: "-10em",
+              }}
+            >
+              <div>
+                <h1>{product.name}</h1>
+                <h2 style={{ fontWeight: "bold" }}>$ {product.precio}</h2>
+                <div>
+                  <Button
+                    variant="light"
+                    block
+                    style={{
+                      marginTop: "1em",
+                    }}
+                  >
+                    AGREGAR AL CARRITO
+                  </Button>
+                </div>
+                <div>
+                  <Button
+                    variant="dark"
+                    block
+                    style={{
+                      marginTop: "1em",
+                    }}
+                  >
+                    COMPRAR AHORA
+                  </Button>
+                </div>
+                <div
+                  style={{
+                    marginTop: "1em",
+                  }}
+                >
+                  {product.descripcion}
+                </div>
+              </div>
             </Row>
           </Col>
         </Row>
