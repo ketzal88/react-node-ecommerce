@@ -10,12 +10,14 @@ import {
   InputGroup,
   Button,
   Dropdown,
-  FormCheck,
+  Form,
 } from "react-bootstrap";
 // import { Container, Row } from "reactstrap";
 
 function App() {
   const [products, setProductos] = useState([]);
+  const [search, setSearch] = useState("");
+  const [category, setCategory] = useState("");
 
   useEffect(() => {
     getProductos();
@@ -26,19 +28,38 @@ function App() {
       .then((response) => response.json())
       .then((data) => {
         setProductos(data.products.products);
-        console.log(products);
       });
   }
+
+  const handleSearch = (search) => {
+    fetch("http://localhost:8080/products/" + search)
+      .then((response) => response.json())
+      .then((data) => {
+        setProductos(data.product);
+      });
+  };
+
+  const handleCategory = (category) => {
+    fetch("http://localhost:8080/products/category/" + category)
+      .then((response) => response.json())
+      .then((data) => {
+        setProductos(data.product);
+      });
+  };
 
   return (
     <div>
       <Navbar bg="light" variant="light">
-        <Nav className='ml-5 mt-3 mb-3'>
+        <Nav className="ml-5 mt-3 mb-3">
           <Nav.Link href="#home">Inicio</Nav.Link>
           <Nav.Link href="#features">Comprar</Nav.Link>
           <Nav.Link href="#pricing">Blog</Nav.Link>
         </Nav>
-        <Navbar.Brand className='m-auto' href="#home"style={{ fontWeight: 'bold' }}>
+        <Navbar.Brand
+          className="m-auto"
+          href="#home"
+          style={{ fontWeight: "bold" }}
+        >
           NOMADS
         </Navbar.Brand>
       </Navbar>
@@ -58,7 +79,11 @@ function App() {
                 aria-label="Small"
                 placeholder="Buscar por nombre"
                 aria-describedby="inputGroup-sizing-sm"
+                onChange={(ev) => setSearch(ev.target.value)}
               />
+              <Button variant="secondary" onClick={() => handleSearch(search)}>
+                Buscar
+              </Button>
             </InputGroup>
             <Dropdown.Divider />
             <strong>Precio</strong>
@@ -83,15 +108,12 @@ function App() {
             <Button variant="secondary">Aplicar Filtro</Button>
             <Dropdown.Divider />
             <strong>Categoría</strong>
-            <InputGroup className="mb-3">
-              <InputGroup.Checkbox label="Zapatos" />
-            </InputGroup>
-            <InputGroup className="mb-3">
-              <FormCheck>zaasf</FormCheck>
-            </InputGroup>
-            <InputGroup className="mb-3">
-              <InputGroup.Checkbox />
-            </InputGroup>
+            <Form onChange={(ev) => handleCategory(ev.target.id)}>
+              <Form.Check type="checkbox" label="Zapatos" id={"zapatos"} />
+              <Form.Check type="checkbox" label="Bolsitos" id={"bolsitos"} />
+              <Form.Check type="checkbox" label="Bolsos" id={"bolsos"} />
+              <Form.Check type="checkbox" label="Carteras" id={"carteras"} />
+            </Form>
           </Col>
           <Col xs md lg="10">
             <Row>
@@ -103,7 +125,7 @@ function App() {
                   <Card.Body>
                     <Card.Title>{product.name.toUpperCase()}</Card.Title>
                     <Card.Text>$ {product.precio}</Card.Text>
-                    {/* <Button variant="primary">Buy</Button> */}
+                    <Button variant="secondary">Buy</Button>
                   </Card.Body>
                 </Card>
               ))}
