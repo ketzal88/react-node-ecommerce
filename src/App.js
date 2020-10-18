@@ -17,7 +17,8 @@ import {
 function App() {
   const [products, setProductos] = useState([]);
   const [search, setSearch] = useState("");
-  const [category, setCategory] = useState("");
+  const [min, setMin] = useState("");
+  const [max, setMax] = useState("");
 
   useEffect(() => {
     getProductos();
@@ -41,6 +42,14 @@ function App() {
 
   const handleCategory = (category) => {
     fetch("http://localhost:8080/products/category/" + category)
+      .then((response) => response.json())
+      .then((data) => {
+        setProductos(data.product);
+      });
+  };
+
+  const handlePrice = (min, max) => {
+    fetch("http://localhost:8080/products/price/" + min + "/" + max)
       .then((response) => response.json())
       .then((data) => {
         setProductos(data.product);
@@ -95,6 +104,7 @@ function App() {
                 aria-label="Small"
                 placeholder="Minimo"
                 aria-describedby="inputGroup-sizing-sm"
+                onChange={(ev) => setMin(ev.target.value)}
               />
             </InputGroup>
             <InputGroup className="mb-3">
@@ -103,9 +113,10 @@ function App() {
                 aria-label="Small"
                 placeholder="Maximo"
                 aria-describedby="inputGroup-sizing-sm"
+                onChange={(ev) => setMax(ev.target.value)}
               />
             </InputGroup>
-            <Button variant="secondary">Aplicar Filtro</Button>
+            <Button variant="secondary" onClick={() => handlePrice(min, max)}>Aplicar Filtro</Button>
             <Dropdown.Divider />
             <strong>Categoría</strong>
             <Form onChange={(ev) => handleCategory(ev.target.id)}>
