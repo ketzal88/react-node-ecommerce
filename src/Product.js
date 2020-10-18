@@ -5,26 +5,26 @@ import {
   Container,
   Row,
   Col,
-  Text,
   Image,
   Button,
-  H1,
-  H2,
-  H4
 } from "react-bootstrap";
+import {
+  useParams
+} from "react-router-dom";
 
-function App() {
+function Product() {
   const [product, setProduct] = useState([]);
+  const { id } = useParams();
 
   useEffect(() => {
     getProduct();
   }, []);
 
   function getProduct() {
-    fetch("http://localhost:8080/products")
+    fetch("http://localhost:8080/product/" + id)
       .then((response) => response.json())
       .then((data) => {
-        setProduct(data.product.product);
+        setProduct(data.product[0]);
       });
   }
 
@@ -51,12 +51,12 @@ function App() {
           </Col>
           <Col xs md lg="4">
             <Row>
-              <H1>{product.name}</H1>
-              <H2>{product.precio}</H2>
-              <H4>{product.categoria}</H4>
+              <h1>{product.name}</h1>
+              <h2>{product.precio}</h2>
+              <h4>{product.categoria}</h4>
               <Button variant="secondary">AGREGAR AL CARRITO</Button>
               <Button variant="dark">COMPRAR AHORA</Button>
-              <Text>{product.descripcion}</Text>
+              <span>{product.descripcion}</span>
             </Row>
           </Col>
         </Row>
@@ -65,4 +65,4 @@ function App() {
   );
 }
 
-export default App;
+export default Product;
