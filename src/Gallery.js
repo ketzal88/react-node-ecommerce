@@ -19,18 +19,19 @@ function Gallery() {
   const [search, setSearch] = useState("");
   const [selectedPage, setSelectedPage] = useState(0);
   const [page, setPage] = useState([]);
+  let [category, setCategory] = useState([]);
   const [min, setMin] = useState("");
   const [max, setMax] = useState("");
 
   useEffect(() => {
     getProductos();
-  }, [selectedPage]);
+  }, [selectedPage, search, min, max, category]);
 
   const history = useHistory();
   const handleClick = (product) => history.push(`/product/${product}`);
 
   function getProductos() {
-    fetch(`http://localhost:8080/products?page=${selectedPage}`)
+    fetch(`http://localhost:8080/products?page=${selectedPage}&search=${search}&priceMin=${min}&priceMax=${max}&category=${category}`)
       .then((response) => response.json())
       .then((data) => {
         setProductos(data.productos);
@@ -39,31 +40,19 @@ function Gallery() {
       });
   }
 
-  const handleSearch = (search) => {
-    fetch("http://localhost:8080/products/" + search)
-      .then((response) => response.json())
-      .then((data) => {
-        setProductos(data.product);
-      });
+  const handleCategory = (categoria, value) => {
+    if (value) {
+      category.push(categoria)
+      category = [...new Set(category)]
+    } else if (!value) {
+      category.splice(category.findIndex(e => category === categoria),1);
+    }
+
+    console.log(category)
+    setCategory(category)
+    getProductos();
   };
 
-  const handleCategory = (category) => {
-    fetch("http://localhost:8080/products/category/" + category)
-      .then((response) => response.json())
-      .then((data) => {
-        setProductos(data.product);
-      });
-  };
-
-  const handlePrice = (min, max) => {
-    fetch("http://localhost:8080/products/price/" + min + "/" + max)
-      .then((response) => response.json())
-      .then((data) => {
-        setProductos(data.product);
-      });
-  };
-
-  console.log(selectedPage);
   return (
     <div>
       <Header />
@@ -86,7 +75,7 @@ function Gallery() {
                 onChange={(ev) => setSearch(ev.target.value)}
               />
             </InputGroup>
-            <Button variant="secondary" onClick={() => handleSearch(search)}>
+            <Button variant="secondary" onClick={() => getProductos()}>
               Buscar
             </Button>
             <Dropdown.Divider />
@@ -111,12 +100,12 @@ function Gallery() {
                 onChange={(ev) => setMax(ev.target.value)}
               />
             </InputGroup>
-            <Button variant="secondary" onClick={() => handlePrice(min, max)}>
+            <Button variant="secondary" onClick={() => getProductos()}>
               Aplicar Filtro
             </Button>
             <Dropdown.Divider />
             <strong>Categoría</strong>
-            <Form onChange={(ev) => handleCategory(ev.target.id)}>
+            <Form  onChange={(ev) => handleCategory(ev.target.id, ev.target.checked)}>
               <Form.Check type="checkbox" label="Zapatos" id={"zapatos"} />
               <Form.Check type="checkbox" label="Bolsitos" id={"bolsitos"} />
               <Form.Check type="checkbox" label="Bolsos" id={"bolsos"} />
@@ -144,13 +133,14 @@ function Gallery() {
               </Pagination>
             </Row>
             <Row>
-              {products.map((product) => (
+              {products.map((product, index) => (
                 <Card
                   style={{
                     maxWidth: "25%",
                     padding: "1em",
                     border: "none",
                   }}
+                  key={index}
                 >
                   <Card.Img variant="top" src={product.img} />
                   <Card.Body>
