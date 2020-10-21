@@ -1,5 +1,11 @@
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
+
+This is a web app that gets products from a JSON from a server in NodeJS and show them in a React Panel and you can search and filter by name, categories and prices
+
+To build this WebAPP I used ReactJs with boostrap for the front and NodeJS with ExpressJS for the back
+
+
 ## Available Scripts
 
 In the project directory, you can run:
